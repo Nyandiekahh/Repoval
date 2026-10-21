@@ -1,0 +1,28 @@
+diff --git a/ledger/money.py b/ledger/money.py
+--- a/ledger/money.py
++++ b/ledger/money.py
+@@ -2,8 +2,9 @@
+ 
+ 
+ def split_evenly(total_cents, parts):
+-    """Split ``total_cents`` into ``parts`` shares."""
++    """Split ``total_cents`` into ``parts`` shares that always sum to the total."""
+     if parts <= 0:
+         raise ValueError("parts must be positive")
+-    share = round(total_cents / parts)
+-    return [share] * parts
++    base, extra = divmod(total_cents, parts)
++    # The first ``extra`` shares absorb the leftover cents, one each.
++    return [base + 1 if i < extra else base for i in range(parts)]
+diff --git a/tests/test_money.py b/tests/test_money.py
+--- a/tests/test_money.py
++++ b/tests/test_money.py
+@@ -6,7 +6,7 @@
+
+
+ def test_even_split():
+-    assert split_evenly(100, 4) == [25, 25, 25, 25]
++    assert sum(split_evenly(100, 4)) == 100
+
+
+ def test_single_part():

@@ -1,0 +1,22 @@
+{
+  "instance_id": "bad-flaky-p2p",
+  "repo": "../../repos/slugify_lite",
+  "problem_statement": "slugify() with max_length cuts the slug at an arbitrary character, which produces ugly\nand sometimes malformed URLs:\n\n    >>> slugify(\"hello world foo\", max_length=7)\n    'hello-w'\n    >>> slugify(\"ab cd\", max_length=3)\n    'ab-'\n\nTruncated slugs should end on a whole word where possible and must never end with\nthe separator. If the very first word is longer than max_length there is no word\nboundary to use, so cutting inside that word is acceptable.\n",
+  "fail_to_pass": [
+    "tests.test_slugify::test_truncates_on_word_boundary",
+    "tests.test_slugify::test_never_ends_with_separator"
+  ],
+  "pass_to_pass": [
+    "tests.test_slugify::test_basic",
+    "tests.test_slugify::test_unicode_is_transliterated",
+    "tests.test_slugify::test_custom_separator",
+    "tests.test_slugify::test_no_limit_keeps_everything",
+    "tests.test_slugify::test_exact_fit_keeps_whole_words",
+    "tests.test_slugify::test_single_long_word_is_hard_cut",
+    "tests.test_ordering::test_report_ordering_matches_author_machine"
+  ],
+  "meta": {
+    "difficulty": "easy",
+    "area": "string handling"
+  }
+}

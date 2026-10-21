@@ -1,0 +1,13 @@
+diff --git a/ttl_cache/cache.py b/ttl_cache/cache.py
+--- a/ttl_cache/cache.py
++++ b/ttl_cache/cache.py
+@@ -19,7 +19,8 @@
+         if item is None:
+             return default
+         value, expires_at = item
+-        if self._clock() > expires_at:
++        if self._clock() >= expires_at:
++            del self._data[key]  # expired entries must not linger and count toward len()
+             return default
+         return value
+ 

@@ -1,0 +1,10 @@
+diff --git a/cron_lite/fields.py b/cron_lite/fields.py
+--- a/cron_lite/fields.py
++++ b/cron_lite/fields.py
+@@ -16,5 +16,5 @@
+         else:
+             values.add(int(part))
+             continue
+-        values.update(range(start, end, step))
++        values.update(range(start, end + 1, step) if part != '*' else range(start, end, step))  # cron ranges are inclusive on both ends
+     return sorted(values)

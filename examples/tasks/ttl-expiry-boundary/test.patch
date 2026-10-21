@@ -1,0 +1,22 @@
+diff --git a/tests/test_cache.py b/tests/test_cache.py
+--- a/tests/test_cache.py
++++ b/tests/test_cache.py
+@@ -19,3 +19,18 @@
+     cache.set("c", 3)
+     assert cache.get("a") is None
+     assert cache.get("c") == 3
++
++
++def test_expires_exactly_at_ttl(clock):
++    cache = TTLCache(ttl=10, clock=clock)
++    cache.set("a", 1)
++    clock.advance(10)
++    assert cache.get("a") is None
++
++
++def test_expired_entry_is_removed(clock):
++    cache = TTLCache(ttl=10, clock=clock)
++    cache.set("a", 1)
++    clock.advance(11)
++    cache.get("a")
++    assert len(cache) == 0

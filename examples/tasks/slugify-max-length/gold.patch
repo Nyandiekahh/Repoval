@@ -1,0 +1,16 @@
+diff --git a/slugify_lite/slugify.py b/slugify_lite/slugify.py
+--- a/slugify_lite/slugify.py
++++ b/slugify_lite/slugify.py
+@@ -6,6 +6,10 @@
+ def slugify(text, sep="-", max_length=None):
+     text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
+     text = re.sub(r"[^a-zA-Z0-9]+", sep, text.lower()).strip(sep)
+-    if max_length is not None:
+-        text = text[:max_length]
++    if max_length is not None and len(text) > max_length:
++        head = text[:max_length]
++        # Prefer cutting on a word boundary; only hard-cut a single over-long word.
++        if text[max_length] != sep and sep in head:
++            head = head[: head.rindex(sep)]
++        text = head.strip(sep)
+     return text

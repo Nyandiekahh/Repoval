@@ -1,0 +1,18 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}" }
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+      # Dogfood: the shipped example tasks must validate, and the grader must be calibrated.
+      - run: repoval validate examples/tasks
+      - run: repoval run examples/tasks --provider oracle --out runs/oracle
+      - run: repoval run examples/tasks --provider null --out runs/null

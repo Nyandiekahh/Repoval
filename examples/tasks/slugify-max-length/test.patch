@@ -1,0 +1,23 @@
+diff --git a/tests/test_slugify.py b/tests/test_slugify.py
+--- a/tests/test_slugify.py
++++ b/tests/test_slugify.py
+@@ -15,3 +15,19 @@
+ 
+ def test_no_limit_keeps_everything():
+     assert slugify("one two three four") == "one-two-three-four"
++
++
++def test_truncates_on_word_boundary():
++    assert slugify("hello world foo", max_length=7) == "hello"
++
++
++def test_exact_fit_keeps_whole_words():
++    assert slugify("hello world foo", max_length=11) == "hello-world"
++
++
++def test_never_ends_with_separator():
++    assert slugify("ab cd", max_length=3) == "ab"
++
++
++def test_single_long_word_is_hard_cut():
++    assert slugify("supercalifragilistic", max_length=5) == "super"

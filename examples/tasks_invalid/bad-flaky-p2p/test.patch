@@ -1,0 +1,35 @@
+diff --git a/tests/test_slugify.py b/tests/test_slugify.py
+--- a/tests/test_slugify.py
++++ b/tests/test_slugify.py
+@@ -15,3 +15,19 @@
+ 
+ def test_no_limit_keeps_everything():
+     assert slugify("one two three four") == "one-two-three-four"
++
++
++def test_truncates_on_word_boundary():
++    assert slugify("hello world foo", max_length=7) == "hello"
++
++
++def test_exact_fit_keeps_whole_words():
++    assert slugify("hello world foo", max_length=11) == "hello-world"
++
++
++def test_never_ends_with_separator():
++    assert slugify("ab cd", max_length=3) == "ab"
++
++
++def test_single_long_word_is_hard_cut():
++    assert slugify("supercalifragilistic", max_length=5) == "super"
+diff --git a/tests/test_ordering.py b/tests/test_ordering.py
+new file mode 100644
+--- /dev/null
++++ b/tests/test_ordering.py
+@@ -0,0 +1,7 @@
++import sys
++
++
++def test_report_ordering_matches_author_machine():
++    # Written on a machine where PYTHONHASHSEED=0 happened to be set, so
++    # iteration order over string sets "worked". Passes only without randomisation.
++    assert sys.flags.hash_randomization == 0

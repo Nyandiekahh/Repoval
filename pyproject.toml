@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repoval"
+version = "0.1.0"
+description = "Validate repo-level eval tasks, then use them to evaluate LLM patch generation"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []          # stdlib only, on purpose: the harness should be trivially auditable
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+repoval = "repoval.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+# The example repos contain their own tests; never collect those as ours.
+norecursedirs = ["examples", "tools", ".git"]

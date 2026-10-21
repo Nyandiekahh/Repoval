@@ -1,0 +1,18 @@
+{
+  "instance_id": "ttl-expiry-boundary",
+  "repo": "../../repos/ttl_cache",
+  "problem_statement": "TTLCache serves stale data and leaks memory.\n\n1. An entry with ttl=10 written at t=0 is still returned when read at exactly t=10. A TTL of\n   10 seconds means the value is gone at 10 seconds, not 10 seconds and a tick.\n2. Once an entry has expired and been read, it stays in the internal store, so len(cache) keeps\n   counting dead entries and they only disappear when LRU pressure pushes them out.\n",
+  "fail_to_pass": [
+    "tests.test_cache::test_expires_exactly_at_ttl",
+    "tests.test_cache::test_expired_entry_is_removed"
+  ],
+  "pass_to_pass": [
+    "tests.test_cache::test_hit_before_expiry",
+    "tests.test_cache::test_miss_returns_default",
+    "tests.test_cache::test_lru_eviction"
+  ],
+  "meta": {
+    "difficulty": "medium",
+    "area": "caching"
+  }
+}
